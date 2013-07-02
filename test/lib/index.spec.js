@@ -2,8 +2,6 @@ var stream = require('stream');
 var path = require('path');
 var fs = require('fs');
 
-var chai = require('chai');
-
 var features = require('../../lib/index');
 var helper = require('../helper');
 
