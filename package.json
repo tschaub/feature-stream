@@ -1,0 +1,35 @@
+{
+  "name": "feature-stream",
+  "version": "0.0.0",
+  "description": "Managing your geospatial data streams",
+  "author": {
+    "name": "Tim Schaub",
+    "url": "http://tschaub.net/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/tschaub/feature-stream.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tschaub/feature-stream/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://tschaub.mit-license.org/"
+    }
+  ],
+  "main": "lib/index.js",
+  "devDependencies": {
+    "chai": "1.7.2",
+    "grunt-cli": "0.1.9",
+    "grunt": "0.4.1",
+    "grunt-contrib-jshint": "0.6.0",
+    "grunt-mocha-test": "0.5.0",
+    "tmp": "0.0.20",
+    "wrench": "1.5.1"
+  },
+  "scripts": {
+    "test": "grunt test"
+  }
+}
