@@ -31,5 +31,8 @@
   },
   "scripts": {
     "test": "grunt test"
+  },
+  "dependencies": {
+    "readable-stream": "1.0.2"
   }
 }
