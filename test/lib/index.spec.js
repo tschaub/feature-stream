@@ -1,7 +1,7 @@
-var stream = require('stream');
 var path = require('path');
 var fs = require('fs');
 
+var stream = require('../../lib/stream');
 var features = require('../../lib/index');
 var helper = require('../helper');
 
@@ -19,7 +19,7 @@ describe('feature-stream', function() {
 
   after(helper.after);
 
-  xdescribe('from()', function() {
+  describe('from()', function() {
 
     it('creates a readable stream', function() {
       var reader = features.from(path.join(data, 'test.json'));
