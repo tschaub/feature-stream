@@ -28,18 +28,20 @@ describe('feature-stream', function() {
 
   });
 
-  xdescribe('to()', function() {
+  describe('to()', function() {
 
-    it('creates a writable stream', function() {
+    it('creates a writable stream', function(done) {
       var writer = features.to(path.join(data, 'test2.json'));
-      assert.instanceOf(writer, stream.Writable);
+      assert.isTrue(writer.writable);
+      writer.end();
+      writer.on('close', done);
     });
 
     it('can be used to copy data', function(done) {
       var output = path.join(data, 'test2.json');
       var reader = features.from(path.join(data, 'test.json'));
       var writer = features.to(output);
-      writer.on('finish', function() {
+      writer.on('close', function() {
         fs.exists(output, function(exists) {
           assert.isTrue(exists, 'file copied');
           done();
