@@ -38,16 +38,14 @@ describe('feature-stream', function() {
     });
 
     it('can be used to copy data', function(done) {
+      var input = path.join(data, 'test.json');
       var output = path.join(data, 'test2.json');
-      var reader = features.from(path.join(data, 'test.json'));
-      var writer = features.to(output);
+      var writer = features.from(input).pipe(features.to(output));
       writer.on('close', function() {
-        fs.exists(output, function(exists) {
-          assert.isTrue(exists, 'file copied');
-          done();
-        });
+        assert.isTrue(fs.existsSync(output));
+        assert.equal(fs.statSync(output).size, fs.statSync(input).size);
+        done();
       });
-      reader.pipe(writer);
     });
 
   });
