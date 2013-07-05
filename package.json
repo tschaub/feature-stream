@@ -27,10 +27,12 @@
     "grunt-contrib-jshint": "0.6.0",
     "grunt-mocha-test": "0.5.0",
     "tmp": "0.0.20",
-    "wrench": "1.5.1"
+    "wrench": "1.5.1",
+    "grunt-contrib-watch": "0.4.4"
   },
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test",
+    "watch": "grunt test watch"
   },
   "dependencies": {
     "readable-stream": "1.0.2"
