@@ -78,11 +78,13 @@ describe('feature-stream', function() {
       writer.on('close', function() {
         assert.isTrue(fs.existsSync(output));
         assert.equal(fs.statSync(output).size, fs.statSync(input).size);
-        var reader = fs.createReadStream(output);
-        reader.on('data', function(chunk) {
-          assert.isTrue(/^X+$/.test(String(chunk)));
+        fs.readFile(output, function(err, data) {
+          if (err) {
+            return done(err);
+          }
+          assert.isTrue(/^X+$/.test(String(data)));
+          done();
         });
-        reader.on('close', done);
       });
     });
 
