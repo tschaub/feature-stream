@@ -51,6 +51,21 @@ describe('feature-stream', function() {
       });
     });
 
+    it('can be used gzip data', function(done) {
+      var input = path.join(data, 'test.json');
+      var output = path.join(data, 'test2.gz');
+      var writer = features.from(input).pipe(features.to(output));
+      writer.on('error', done);
+      writer.on('finish', function() {
+        // TODO: determine why finish is called to early
+        setTimeout(function() {
+          assert.isTrue(fs.existsSync(output));
+          assert.isTrue(fs.statSync(output).size < fs.statSync(input).size);
+          done();
+        }, 100);
+      });
+    });
+
   });
 
   describe('transform()', function() {

@@ -16,12 +16,14 @@
     "require": false,
     "__dirname": false,
     "it": false,
+    "xit": false,
     "describe": false,
     "xdescribe": false,
     "before": false,
     "beforeEach": false,
     "after": false,
     "afterEach": false,
-    "console": false
+    "console": false,
+    "setTimeout": false
   }
 }
