@@ -34,15 +34,17 @@ describe('feature-stream', function() {
     it('creates a writable stream', function(done) {
       var writer = features.to(path.join(data, 'test2.json'));
       assert.isTrue(writer.writable);
-      writer.end();
-      writer.on('close', done);
+      writer.end('foo');
+      writer.on('finish', done);
+      writer.on('end', done);
     });
 
     it('can be used to copy data', function(done) {
       var input = path.join(data, 'test.json');
       var output = path.join(data, 'test2.json');
       var writer = features.from(input).pipe(features.to(output));
-      writer.on('close', function() {
+      writer.on('error', done);
+      writer.on('finish', function() {
         assert.isTrue(fs.existsSync(output));
         assert.equal(fs.statSync(output).size, fs.statSync(input).size);
         done();
@@ -75,7 +77,7 @@ describe('feature-stream', function() {
           .pipe(transform)
           .pipe(features.to(output));
       assert.instanceOf(transform, stream.Transform);
-      writer.on('close', function() {
+      writer.on('finish', function() {
         assert.isTrue(fs.existsSync(output));
         assert.equal(fs.statSync(output).size, fs.statSync(input).size);
         fs.readFile(output, function(err, data) {
@@ -106,7 +108,7 @@ describe('feature-stream', function() {
           .pipe(transform)
           .pipe(features.to(output));
       assert.instanceOf(transform, stream.Transform);
-      writer.on('close', function() {
+      writer.on('finish', function() {
         assert.isTrue(fs.existsSync(output));
         assert.isTrue(fs.statSync(output).size < fs.statSync(input).size);
         done();
@@ -128,7 +130,7 @@ describe('feature-stream', function() {
           .pipe(transform)
           .pipe(features.to(output));
       assert.instanceOf(transform, stream.Transform);
-      writer.on('close', function() {
+      writer.on('finish', function() {
         assert.isTrue(fs.existsSync(output));
         assert.isTrue(fs.statSync(output).size > fs.statSync(input).size);
         done();
