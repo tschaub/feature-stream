@@ -34,10 +34,9 @@ describe('feature-stream', function() {
     it('creates a writable stream', function(done) {
       var writer = features.to(path.join(data, 'test2.json'));
       assert.isTrue(writer.writable);
-      assert.instanceOf(writer, stream.Transform);
       writer.end('foo');
       writer.on('error', done);
-      writer.on('end', done);
+      writer.on('close', done);
     });
 
     it('can be used to copy data', function(done) {
@@ -45,7 +44,7 @@ describe('feature-stream', function() {
       var output = path.join(data, 'test2.json');
       var writer = features.from(input).pipe(features.to(output));
       writer.on('error', done);
-      writer.on('end', function() {
+      writer.on('close', function() {
         assert.isTrue(fs.existsSync(output));
         assert.equal(fs.statSync(output).size, fs.statSync(input).size);
         done();
@@ -58,21 +57,15 @@ describe('feature-stream', function() {
 
 
       var writer = features.from(input).pipe(features.to(output));
-      assert.instanceOf(writer, stream.Transform);
+      assert.instanceOf(writer, stream.Writable);
 
       writer.on('error', done);
-      writer.on('end', function() {
-        /**
-         * The transform we're given is sucked dry before the gzip transform is.
-         * TODO: provide a Writable that behaves consistently
-         */
-        setTimeout(function() {
-          assert.isTrue(fs.existsSync(output));
-          var outSize = fs.statSync(output).size;
-          assert.isTrue(outSize > 0);
-          assert.isTrue(outSize < fs.statSync(input).size);
-          done();
-        }, 50);
+      writer.on('finish', function() {
+        assert.isTrue(fs.existsSync(output));
+        var outSize = fs.statSync(output).size;
+        assert.isTrue(outSize > 0);
+        assert.isTrue(outSize < fs.statSync(input).size);
+        done();
       });
     });
 
@@ -102,7 +95,7 @@ describe('feature-stream', function() {
           .pipe(transform)
           .pipe(features.to(output));
       assert.instanceOf(transform, stream.Transform);
-      writer.on('finish', function() {
+      writer.on('close', function() {
         assert.isTrue(fs.existsSync(output));
         assert.equal(fs.statSync(output).size, fs.statSync(input).size);
         fs.readFile(output, function(err, data) {
@@ -133,7 +126,7 @@ describe('feature-stream', function() {
           .pipe(transform)
           .pipe(features.to(output));
       assert.instanceOf(transform, stream.Transform);
-      writer.on('finish', function() {
+      writer.on('close', function() {
         assert.isTrue(fs.existsSync(output));
         assert.isTrue(fs.statSync(output).size < fs.statSync(input).size);
         done();
@@ -155,7 +148,7 @@ describe('feature-stream', function() {
           .pipe(transform)
           .pipe(features.to(output));
       assert.instanceOf(transform, stream.Transform);
-      writer.on('finish', function() {
+      writer.on('close', function() {
         assert.isTrue(fs.existsSync(output));
         assert.isTrue(fs.statSync(output).size > fs.statSync(input).size);
         done();
