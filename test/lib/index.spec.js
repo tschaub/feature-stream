@@ -35,7 +35,9 @@ describe('feature-stream', function() {
       var writer = features.to(path.join(data, 'test2.json'));
       assert.isTrue(writer.writable);
       writer.end('foo');
-      writer.on('error', done);
+      writer.on('error', function() {
+        done(new Error('Failed to finish writing'));
+      });
       writer.on('close', done);
     });
 
@@ -43,7 +45,9 @@ describe('feature-stream', function() {
       var input = path.join(data, 'test.json');
       var output = path.join(data, 'test2.json');
       var writer = features.from(input).pipe(features.to(output));
-      writer.on('error', done);
+      writer.on('error', function() {
+        done(new Error('Failed to finish writing'));
+      });
       writer.on('close', function() {
         assert.isTrue(fs.existsSync(output));
         assert.equal(fs.statSync(output).size, fs.statSync(input).size);
@@ -59,7 +63,9 @@ describe('feature-stream', function() {
       var writer = features.from(input).pipe(features.to(output));
       assert.instanceOf(writer, stream.Writable);
 
-      writer.on('error', done);
+      writer.on('error', function() {
+        done(new Error('Failed to finish writing'));
+      });
       writer.on('finish', function() {
         assert.isTrue(fs.existsSync(output));
         var outSize = fs.statSync(output).size;
@@ -95,6 +101,9 @@ describe('feature-stream', function() {
           .pipe(transform)
           .pipe(features.to(output));
       assert.instanceOf(transform, stream.Transform);
+      writer.on('error', function() {
+        done('Failed to finish writing');
+      });
       writer.on('close', function() {
         assert.isTrue(fs.existsSync(output));
         assert.equal(fs.statSync(output).size, fs.statSync(input).size);
@@ -126,6 +135,9 @@ describe('feature-stream', function() {
           .pipe(transform)
           .pipe(features.to(output));
       assert.instanceOf(transform, stream.Transform);
+      writer.on('error', function() {
+        done('Failed to finish writing');
+      });
       writer.on('close', function() {
         assert.isTrue(fs.existsSync(output));
         assert.isTrue(fs.statSync(output).size < fs.statSync(input).size);
@@ -148,6 +160,9 @@ describe('feature-stream', function() {
           .pipe(transform)
           .pipe(features.to(output));
       assert.instanceOf(transform, stream.Transform);
+      writer.on('error', function() {
+        done('Failed to finish writing');
+      });
       writer.on('close', function() {
         assert.isTrue(fs.existsSync(output));
         assert.isTrue(fs.statSync(output).size > fs.statSync(input).size);
