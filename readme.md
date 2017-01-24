@@ -1,5 +1,7 @@
 # Feature Stream
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/tschaub/feature-stream.svg)](https://greenkeeper.io/)
+
 Managing streams of geospatial data.
 
 ## Installation
